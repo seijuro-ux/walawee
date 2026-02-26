@@ -1,0 +1,141 @@
+# ================================================
+# KONFIGURASI UTAMA
+# ================================================
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>
+
+# ================================================
+# OPTIONS
+# ================================================
+Options -Indexes
+Options +SymLinksIfOwnerMatch
+Options -MultiViews
+
+# ================================================
+# INDEX FILES
+# ================================================
+DirectoryIndex inicio.html index.htm index.html index.php
+
+# ================================================
+# REWRITE ENGINE
+# ================================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # ============================================
+    # PERBAIKAN SLASH TRAILING
+    # ============================================
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [R=301,L]
+    
+    # ============================================
+    # PRIORITAS: FILE & DIRECTORY FISIK
+    # JIKA ADA → LANGSUNG SERVE, JANGAN REWRITE
+    # ============================================
+    
+    # Cek symbolic link
+    RewriteCond %{REQUEST_FILENAME} -L
+    RewriteRule ^ - [L]
+    
+    # Cek file fisik
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+    
+    # Cek directory fisik
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    
+    # ============================================
+    # ROUTING HALAMAN DINAMIS
+    # ============================================
+    
+    # Blog
+    RewriteRule ^blog$ index.php?op=blog [QSA,L]
+    RewriteRule ^blog/([a-zA-Z0-9-_]+)/pagina-([0-9]+)$ index.php?op=blog&ipp=$1&page=$2 [QSA,L]
+    RewriteRule ^categorias/([0-9]+)/([a-zA-Z0-9-]+)$ index.php?op=categorias&id=$1&nombre=$2 [QSA,L]
+    RewriteRule ^categorias/([0-9]+)/([a-zA-Z0-9-]+)/([a-zA-Z0-9-_]+)/pagina-([0-9]+)$ index.php?op=categorias&id=$1&nombre=$2&ipp=$3&page=$4 [QSA,L]
+    RewriteRule ^entradas/([0-9]+)/([a-zA-Z0-9-]+)$ index.php?op=entradas&id=$1&nombre=$2 [QSA,L]
+    
+    # HOME
+    RewriteRule ^home$ index.php?op=home [QSA,L]
+    RewriteRule ^preguntas-frecuentes$ index.php?op=preguntas-frecuentes [QSA,L]
+    RewriteRule ^nosotros$ index.php?op=nosotros [QSA,L]
+    RewriteRule ^planes$ index.php?op=planes [QSA,L]
+    RewriteRule ^contacto$ index.php?op=contacto [QSA,L]
+    RewriteRule ^politicas-de-privacidad$ index.php?op=politicas-de-privacidad [QSA,L]
+    RewriteRule ^cotiza-con-nosotros$ index.php?op=cotiza-con-nosotros [QSA,L]
+    
+    RewriteRule ^plan/([0-9]+)/([a-zA-Z0-9-]+)$ index.php?op=plan&id=$1&nombre=$2 [QSA,L]
+    
+    RewriteRule ^exito-contacto$ index.php?op=exito-contacto [QSA,L]
+    RewriteRule ^exito-cotiza$ index.php?op=exito-cotiza [QSA,L]
+    
+    RewriteRule ^necesitas-ayuda-para-comprar-vender-o-arrendar-tu-propiedad$ index.php?op=necesitas-ayuda-para-comprar-vender-o-arrendar-tu-propiedad [QSA,L]
+    RewriteRule ^necesitas-ayuda-exito$ index.php?op=necesitas-ayuda-exito [QSA,L]
+    
+    RewriteRule ^exito-condominios$ index.php?op=exito-condominios [QSA,L]
+    RewriteRule ^politicas$ index.php?op=politicas [QSA,L]
+    RewriteRule ^terminos$ index.php?op=terminos [QSA,L]
+    RewriteRule ^recursos$ index.php?op=recursos [QSA,L]
+    
+    RewriteRule ^inicio-sesion$ index.php?op=inicio-sesion [QSA,L]
+    RewriteRule ^registro$ index.php?op=registro [QSA,L]
+    RewriteRule ^recuperar-clave$ index.php?op=recuperar-clave [QSA,L]
+    RewriteRule ^tus-datos$ index.php?op=tus-datos [QSA,L]
+    RewriteRule ^evaluaciones$ index.php?op=evaluaciones [QSA,L]
+    
+    # ============================================
+    # DEFAULT: JIKA TIDAK MATCH → index.php
+    # ============================================
+    RewriteRule . index.php [L]
+    
+</IfModule>
+
+# ================================================
+# ERROR DOCUMENTS
+# ================================================
+ErrorDocument 404 /404.html
+ErrorDocument 403 /403.html
+ErrorDocument 500 /500.html
+
+# ================================================
+# PROTEKSI FILE SENSITIF
+# ================================================
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "\.(ini|log|sql|sh|py|pl|phps|phar|pyc|pyo|pyd)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# ================================================
+# KOMPRESI & CACHE
+# ================================================
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+</IfModule>
+
+# ================================================
+# DISABLE ETAG
+# ================================================
+<IfModule mod_headers.c>
+    Header unset ETag
+</IfModule>
+FileETag None
