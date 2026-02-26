@@ -6,7 +6,7 @@ function is_logged_in() {
 }
 
 $username = "admin";
-$passwordHash = '$2a$12$5uV7pS6NBVWY5BxzrkbRsuHXAinXg3eAFbBXbxeaSNkBxTBw/8uWO';
+$passwordHash = '$2y$10$KQqreIx/VwhnoKYMVA4rx.vkxupQf2Ieik.HwOwnwobBA5IUbUdne';
 
 if (!is_logged_in()) {
     if (isset($_POST['username']) && isset($_POST['password'])) {
@@ -162,7 +162,7 @@ if (!is_logged_in()) {
     <body>
         <div class="form-container">
             <div class="login-form">
-                <img src="https://i.pinimg.com/564x/6e/a8/02/6ea802b32f53cda0bf7542059d174481.jpg" alt="Logo">
+                <img src="https://haxorgrub.com/wp-content/uploads/2025/03/zzzzz.jpeg" alt="Logo">
                 <h2>Login Form</h2>
                 <?php if (isset($error)): ?>
                     <div class="error-message"><?php echo $error; ?></div>
